@@ -1,3 +1,5 @@
+`Machine Learning`, `Neural Network` , `Data Visualizations`, `Model From Scratch`, `Data cleaning`, `Python`, `WaveNet`
+
 # Sound Synthesis Demo - Digits 0, 1, ... 9
 <br>
 Genereted audio of digits from 0-9
