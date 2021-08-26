@@ -6,20 +6,20 @@ INSERT combined.mp4
     <img src="./readme_res/audio_generation_09.png">
 </p>
 
-# WaveNet architecture - a breif introduction
-Wavenet is an autoregressive model that use local and global embeddings to generate audio from transcripts. The local embeddings are used to convey local transcript information to the model i.e. what needs to be said and when. The global embeddings are transmitted to the entire model and can be used for e.g. speaker embeddings (generate sound in a specific voice). The model was originally praised for two things (1) producing audio that sounded very natural (2) for being parallelizable during training unilike RNNs.
+# WaveNet architecture - a brief introduction
+Wavenet is an autoregressive model that uses local and global embeddings to generate audio from transcripts. The local embeddings are used to convey local transcript information to the model i.e. what needs to be said and when. The global embeddings are transmitted to the entire model and can be used for e.g. speaker embeddings (generate sound in a specific voice). The model was originally praised for two things (1) producing audio that sounded very natural (2) for being parallelizable during training, unlike RNNs.
+
+I'm not gonna explain WaveNet in detail because it would take way too much time to do. I have however made a simple figure which can be seen below. This doesn't tell the whole story, but should hopefully get the main point(s) across. 
 <br>
 <br>
-I'm not gonna explain WaveNet in details, because it would take way to much time do. I have however made a simple figure which can be seen below. This don't tell the whole story, but should hopefully get the main point(s) across. 
-<br>
-<br>
+
 <p align="center">
   <img src="./readme_res/complete_arcitecture.png" alt="Drawing"/ width=1000>
 </p>
 
-# Acknowledgement
+# Acknowledgment
 
-* Zohar Jackson's [free spoken digit dataset dataset](https://github.com/Jakobovski/free-spoken-digit-dataset) was used for training and evaluation
+* Zohar Jackson's [free spoken digit dataset](https://github.com/Jakobovski/free-spoken-digit-dataset) was used for training and evaluation
 * The model architecture was directly inspired by Google's original Wavenet paper [A Generative Model for Raw Audio](https://export.arxiv.org/abs/1609.03499)
 * Text to phoneme embeddings was done with Kyubyong Park's [g2p_en](https://github.com/Kyubyong/g2p)
 * r9y9's [WaveNet implementation](https://github.com/r9y9/wavenet_vocoder) was used for inspiration
@@ -134,7 +134,7 @@ if C.use_wandb:
 7. Dataset and Dataloaders
 
 ## Overview
-The dataset contains 3,000 audio files of spoken digits ranging from 0-9. The file format is `.wav` and the freqency or sampling rate is 8,000 Hz. The audio files are recorded by 6 different speakers: `george`, `jackson`, `lucas`, `nicolas`, `theo`, `yweweler` whose responible for exactly 500 audio files each (50 for each digit). 
+The dataset contains 3,000 audio files of spoken digits ranging from 0-9. The file format is `.wav` and the frequency or sampling rate is 8,000 Hz. The audio files are recorded by 6 different speakers: `george`, `jackson`, `lucas`, `nicolas`, `theo`, `yweweler` whose responsible for exactly 500 audio files each (50 for each digit). 
 
 ### Audio Sample
 
@@ -182,8 +182,8 @@ print("Files recorded by count: \n", files_recorded)
      {'georgewav': 500, 'jacksonwav': 500, 'ywewelerwav': 500, 'theowav': 500, 'nicolaswav': 500, 'lucaswav': 500}
 
 
-## Down sample
-A sampling rate of 8,000 Hz is relatively low (think the standard is 16,000 Hz and above). I'm going to downsmaple despite of this, because it makes the problem so much more tractable. After playing around with different sampling rates, I concluded that a reduction of 50% (4,000 Hz) seemed reasonable, comparison:
+## Downsample
+A sampling rate of 8,000 Hz is relatively low (think the standard is 16,000 Hz and above). I'm going to downsample despite this because it makes the problem so much more tractable. After playing around with different sampling rates, I concluded that a reduction of 50% (4,000 Hz) seemed reasonable, comparison:
 
 
 ```python
@@ -205,11 +205,11 @@ INSERT audio_sample_4k.mp4
 <br>
 
 ## Maximum sound length and zero padding
-WaveNet dosn't handle different sized inputs well. Technically speaking, one could get away with just making every batch the same size, but this is more trouble than it's worth in my opinion.
+WaveNet doesn't handle different-sized inputs well. Technically speaking, one could get away with just making every batch the same size, but this is more trouble than it's worth in my opinion.
 <br>
 This means that we need to specify a maximum length for the audio files and use this to truncate/zero-pad every sound longer/shorter than this. 
 <br>
-An obvious maximum length would to the length of the longest audio file, but this is super wasteful. In the plot below, it's clear to see that the vast majority of the sounds are way shorter than that of the longest. There's no right solution here, but i think having 95\% of the files remain un-truncated would be reasonble. This would mean the cutoff would be the 95\% quantile
+An obvious maximum length would to the length of the longest audio file, but this is super wasteful. In the plot below, it's clear to see that the vast majority of the sounds are way shorter than that of the longest. There's no right solution here, but I think having 95\% of the files remain un-truncated would be reasonable. This would mean the cutoff would be the 95\% quantile
 
 
 ```python
@@ -246,7 +246,7 @@ threshold = threshold//2 # going to downsample before appling the threshold
 </p>
 
 ## Apply preprocessing - downsample and cutoff 
-I'm going to apply both downsample and length cutoff (truncate/zero padd) before training to save time.
+I'm going to apply both downsample and length cutoff (truncate/zero pad) before training to save time.
 
 
 ```python
@@ -397,15 +397,16 @@ df
 
 
 ## Train and validation split
-It's not immediately obvious how to do the split, but the follwing two approaches seem reasonable:
-<br>
-1. Use all audio files from a single speaker as validition set (would yeild 500 validation samples corrosponding to \~16.7% of the data) and the remaining files as training data
-2. Do a random, but stratified, split over all speakers.
+It's not immediately obvious how to do the split, but the following two approaches seem reasonable:
 <br>
 
-Both of these has obvious problems. Case 1. seems a bit unfair because the model has never heard that particular voice before. One could argue this would show generlazation capabilities, but I don't think this is necesarily true bevause we're dealing with sound synthesis. Case 2. may suffer from train-validition leakage, since it's reasonable to assume that digits spoken by the same speaker are very similiar. I do however think it's the best of the two, but it could be fun to test case 1. as well if time permits it.
+1. Use all audio files from a single speaker as a validation set (would yield 500 validation samples corresponding to ~16.7% of the data) and the remaining files as training data
+2. Do a random, but stratified, split overall speakers.
+
 <br>
-Since I don't have that much data, the split is going to be 90\% for training and 10\% for validation. There's two choices for stratification "label": speaker and number. I decided (somewhat arbitrarily) to use the numbers.
+
+Both of these have obvious problems. Case 1. seems a bit unfair because the model has never heard that particular voice before. One could argue this would show generalization capabilities, but I don't think this is necessarily true because we're dealing with sound synthesis. Case 2. may suffer from train-validation leakage, since it's reasonable to assume that digits spoken by the same speaker are very similar. I do however think it's the best of the two, but it could be fun to test case 1. as well if time permits it.
+Since I don't have that much data, the split is going to be 90% for training and 10% for validation. There are two choices for stratification "label": speaker and number. I decided (somewhat arbitrarily) to use the numbers.
 
 
 ```python
@@ -423,21 +424,6 @@ display(df_train)
 display(df_valid)
 ```
 
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-    
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -529,24 +515,7 @@ display(df_valid)
   </tbody>
 </table>
 <p>2700 rows × 4 columns</p>
-</div>
 
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-    
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -638,15 +607,15 @@ display(df_valid)
   </tbody>
 </table>
 <p>300 rows × 4 columns</p>
-</div>
-
+<br>
 
 ## EmbeddingNet - Local and global embeddings
+
 `EmbeddingNet` is responsible for making global and local embeddings for the `WaveNet` model.
 <br>
-The global embeddings are simply made from speaker IDs (integers) which gets one hot encoded and send throguh some 1x1 convolution to make the channels add up and provide some expresseive power. 
+The global embeddings are simply made from speaker IDs (integers) which get one hot encoded and send through some 1x1 convolution to make the channels add up and provide some expressive power. 
 <br>
-The local embeddings are made from phoneme predictions provided by [g2p](https://github.com/Kyubyong/g2p). These are one hot encoded, send through a "learned upscaling" net, interpolated and zero padded to match the shape of the waveforms.
+The local embeddings are made from phoneme predictions provided by [g2p](https://github.com/Kyubyong/g2p). These are one-hot encoded, send through a "learned upscaling" net, interpolated, and zero-padded to match the shape of the waveforms.
 
 
 ```python
@@ -768,14 +737,14 @@ del train_dataset, valid_dataset # No use for these
 
 # Training
 1. Setup EmbeddingNet and WaveNet
-2. Setup los, optimizer and learning rate scheduler
+2. Setup loss, optimizer, and learning rate scheduler
 3. Training loop with Weights and Biases
 4. Visualization
 
 ## Setup EmbeddingNet and WaveNet
-The role of `EmbeddingNet` has already been explained and my implementation of WaveNet was introduced in first section.
+The role of `EmbeddingNet` has already been explained and my implementation of WaveNet was introduced in the first section.
 <br>
-The parameter count for both models is in the neighbourhood 6 milion parameters, which seems very reasonable ─ perhaps even to modest, that is the models may not have a sufficient number of parameters to fulfil the task at hand.
+The parameter count for both models is in the neighborhood of 6 million parameters, which seems very reasonable ─ perhaps even too modest, that is the models may not have a sufficient number of parameters to fulfill the task at hand.
 
 
 ```python
@@ -958,12 +927,13 @@ del waveform, target, speaker, transcript, cutoff_index
 
 
 ## Setup loss, optimizer and learning rate scheduler
-Cross entropy is a no brainer for loss because WaveNet outputs a probability distribution.
-<br> 
-Adam was used as optimizer with a start learning rate of 1e-3 and Pytorch's `LambdaLR` was used as LR-scheduler.
+Cross entropy is a no-brainer for loss because WaveNet outputs a probability distribution.
+<br>
+Adam was used as an optimizer with a start learning rate of 1e-3 and Pytorch's `LambdaLR` was used as LR-scheduler.
 <br>
 The LR-scheduler was found with a small Jupyter notebook GUI I have written see [here](https://github.com/Jako-K/schedulerplotter). Picture below:
 <br>
+
 <p align="center">
     <img src="./readme_res/scheduler_plotter.png">
 </p>
