@@ -1,6 +1,13 @@
-# Sound Synthesis Demo
+# Sound Synthesis Demo - Digits 0, 1, ... 9
 <br>
-INSERT combined.mp4
+Genereted audio of digits from 0-9
+
+
+
+https://user-images.githubusercontent.com/78201238/130965974-f3db4896-9b87-4ad2-b8ed-573bd9e97c84.mp4
+
+
+
 <br>
 <p aling="center">
     <img src="./readme_res/audio_generation_09.png">
@@ -9,7 +16,7 @@ INSERT combined.mp4
 # WaveNet architecture - a brief introduction
 Wavenet is an autoregressive model that uses local and global embeddings to generate audio from transcripts. The local embeddings are used to convey local transcript information to the model i.e. what needs to be said and when. The global embeddings are transmitted to the entire model and can be used for e.g. speaker embeddings (generate sound in a specific voice). The model was originally praised for two things (1) producing audio that sounded very natural (2) for being parallelizable during training, unlike RNNs.
 
-I'm not gonna explain WaveNet in detail because it would take way too much time to do. I have however made a simple figure which can be seen below. This doesn't tell the whole story, but should hopefully get the main point(s) across. 
+I'm not gonna explain WaveNet in detail because it would take way too much time to do so. I have however made a simple figure which can be seen below. This doesn't tell the whole story, but should hopefully get the main point(s) across. 
 <br>
 <br>
 
@@ -146,7 +153,9 @@ H.jupyter_play_audio(sample_path)
 ```
 
 <br>
-INSERT audio_sample.mp4
+
+https://user-images.githubusercontent.com/78201238/130966429-a90fbdca-194d-45cf-86f1-b192baf8ab7c.mp4
+
 <br>
 <p align="center">
   <img src="./readme_res/audio_sample.png" width=450>
@@ -197,11 +206,18 @@ Audio(down_sampler(waveform), rate=4000)
 
 <br>
 Frequency 8k (original)
-INSERT audio_sample.mp4
 <br>
+
+https://user-images.githubusercontent.com/78201238/130966555-5eabc45d-1b21-4ade-a577-ab098279b1ea.mp
+
 <br>
 Frequency 4k (down sampled)
-INSERT audio_sample_4k.mp4
+<br>
+
+
+https://user-images.githubusercontent.com/78201238/130966604-a646ebcf-547d-4b42-b4c7-ab6e9297551d.mp4
+
+
 <br>
 
 ## Maximum sound length and zero padding
@@ -281,26 +297,7 @@ df
 
 
 
-      0%|          | 0/3000 [00:00<?, ?it/s]
-
-
-
-
-
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-    
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1108,7 +1105,9 @@ plt.show()
 ```
 
 <br>
-INSERT combined.mp4
+
+https://user-images.githubusercontent.com/78201238/130966732-b16e3d5c-7920-478d-ba4c-6908bfbf7ba2.mp4
+
 <br>
 <p aling="center">
     <img src="./readme_res/audio_generation_09.png">
