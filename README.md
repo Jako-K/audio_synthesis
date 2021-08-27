@@ -1,9 +1,7 @@
-`Machine Learning`, `Neural Network` , `Data Visualizations`, `Model From Scratch`, `Data cleaning`, `Python`, `WaveNet`
+`Machine Learning`, `Neural Network` , `Data Visualizations & Cleaning`, `Model From Scratch`, `Python`, `WaveNet`
 
 # Sound Synthesis Demo - Digits 0, 1, ... 9
 <br>
-Genereted audio of digits from 0-9
-
 
 
 https://user-images.githubusercontent.com/78201238/130965974-f3db4896-9b87-4ad2-b8ed-573bd9e97c84.mp4
@@ -16,9 +14,9 @@ https://user-images.githubusercontent.com/78201238/130965974-f3db4896-9b87-4ad2-
 </p>
 
 # WaveNet architecture - a brief introduction
-Wavenet is an autoregressive model that uses local and global embeddings to generate audio from transcripts. The local embeddings are used to convey local transcript information to the model i.e. what needs to be said and when. The global embeddings are transmitted to the entire model and can be used for e.g. speaker embeddings (generate sound in a specific voice). The model was originally praised for two things (1) producing audio that sounded very natural (2) for being parallelizable during training, unlike RNNs.
+Wavenet is an autoregressive model that uses local and global embeddings to generate audio from transcripts. The local embeddings are used to convey local transcript information to the model i.e. what needs to be said and when. The global embeddings are transmitted to the entire model and can for instance be used for speaker embeddings (generate sound in a specific voice). The model was originally praised for two things (1) producing audio that sounded very natural (2) for being parallelizable during training, unlike RNNs.
 
-I'm not gonna explain WaveNet in detail because it would take way too much time to do so. I have however made a simple figure which can be seen below. This doesn't tell the whole story, but should hopefully get the main point(s) across. 
+I'm not gonna explain WaveNet in detail because it would take too long, but I have made a simple figure which can be seen below. This figure doesn't tell the whole story, but should hopefully get the main point(s) across. 
 <br>
 <br>
 
