@@ -1080,7 +1080,7 @@ def generate_all(transcript, model, save_name, seed):
 ```
 
 ## Actual audio generation
-Generate digit sounds (0-9) from seeds found in `./digits_for_generation`
+Generate digit sounds (0-9) from seeds
 
 
 ```python
